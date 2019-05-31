@@ -17,7 +17,7 @@ workflow "Publish on release" {
 action "Publish" {
   uses = "altipla-consulting/altipla.actions/go-release@master"
   env = {
-    BINARY_NAME = "validate-proto-http"
+    BINARY_FOLDER = "./cmd/validate-proto-http"
   }
   secrets = ["GITHUB_TOKEN"]
 }

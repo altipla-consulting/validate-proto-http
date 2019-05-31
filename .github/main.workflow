@@ -1,3 +1,4 @@
+
 workflow "Build on push" {
   on = "push"
   resolves = ["Build"]
@@ -15,7 +16,7 @@ workflow "Publish on release" {
 
 action "Publish" {
   uses = "altipla-consulting/altipla.actions/go-release@master"
-  env {
+  env = {
     BINARY_NAME = "validate-proto-http"
   }
   secrets = ["GITHUB_TOKEN"]

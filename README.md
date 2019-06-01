@@ -3,13 +3,13 @@
 
 Validate gRPC HTTP options mapping the methods to JSON.
 
-### Install
+## Install
 
 ```
 curl -sSL https://git.io/fjE3d | sudo bash
 ```
 
-### Usage
+## Usage
 
 Run the app in the folder where you want to scan recursively all the protos:
 
@@ -18,12 +18,12 @@ validate-proto-http
 ```
 
 
-### Contributing
+## Contributing
 
 You can make pull requests or create issues in GitHub. Any code you send should be formatted using `make gofmt`.
 
 
-### Running tests
+## Running tests
 
 Run the tests:
 
@@ -32,6 +32,6 @@ make test
 ```
 
 
-### License
+## License
 
 [MIT License](LICENSE)

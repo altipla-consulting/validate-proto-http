@@ -1,0 +1,16 @@
+
+syntax = "proto3";
+
+package validate_proto_http.testdata.bad_final_slash;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+service BadFinalSlash {
+  rpc Method(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/bad/url/"
+      body: "*"
+    };
+  }
+}

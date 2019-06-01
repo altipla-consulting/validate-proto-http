@@ -1,0 +1,30 @@
+
+syntax = "proto3";
+
+package validate_proto_http.testdata.bad_repeated;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+service BadRepeatedService {
+  rpc Method(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/bad/url"
+      body: "*"
+    };
+  }
+
+  rpc Method2(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/bad/url"
+      body: "*"
+    };
+  }
+
+  rpc Method3(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/bad/url"
+      body: "*"
+    };
+  }
+}

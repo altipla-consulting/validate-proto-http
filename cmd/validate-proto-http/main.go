@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
@@ -12,18 +13,28 @@ import (
 	"libs.altipla.consulting/errors"
 )
 
+var pathRe = regexp.MustCompile(`^(/(([a-z0-9-]+)|(([a-z0-9-]+:)?{[a-z0-9_]+})))+$`)
+
 func main() {
 	if err := run(); err != nil {
 		log.Fatal(errors.Stack(err))
 	}
 }
 
-func run() error {
+func init() {
 	if os.Getenv("BUILD_ID") != "" {
 		// We don't need colors in Jenkins
 		log.SetFormatter(&log.TextFormatter{DisableColors: true})
+	} else {
+		log.SetFormatter(&log.TextFormatter{ForceColors: true})
 	}
+}
 
+func run() error {
+	return errors.Trace(checkFiles("."))
+}
+
+func checkFiles(root string) error {
 	log.Info("Searching for services to validate")
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -47,6 +58,7 @@ func run() error {
 		log.WithField("path", path).Info("Validate services in file")
 
 		for _, file := range files.File {
+			mappings := make(map[string]bool)
 			for _, service := range file.Service {
 				log.WithFields(log.Fields{
 					"service": service.GetName(),
@@ -60,16 +72,20 @@ func run() error {
 					}
 					rule := ext.(*annotations.HttpRule)
 
-					var path string
+					var path, methodName string
 					switch r := rule.Pattern.(type) {
 					case *annotations.HttpRule_Get:
 						path = r.Get
+						methodName = "get"
 					case *annotations.HttpRule_Put:
 						path = r.Put
+						methodName = "put"
 					case *annotations.HttpRule_Post:
 						path = r.Post
+						methodName = "post"
 					case *annotations.HttpRule_Delete:
 						path = r.Delete
+						methodName = "delete"
 					default:
 						return errors.Errorf("unknown http rule pattern: %#v", rule.Pattern)
 					}
@@ -78,13 +94,23 @@ func run() error {
 						"name": method.GetName(),
 						"path": path,
 					}).Info("...... validate method")
+
+					if !pathRe.MatchString(path) {
+						return errors.Errorf("bad http mapping: %v", path)
+					}
+
+					fullpath := methodName + "::" + path
+					if mappings[fullpath] {
+						return errors.Errorf("repeated http mapping: %v", path)
+					}
+					mappings[fullpath] = true
 				}
 			}
 		}
 
 		return nil
 	}
-	if err := filepath.Walk(".", fn); err != nil {
+	if err := filepath.Walk(root, fn); err != nil {
 		return errors.Trace(err)
 	}
 

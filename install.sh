@@ -16,6 +16,6 @@ curl $URL -sSL -o /usr/local/bin/$REPO_NAME || (
 chmod +x,o+x /usr/local/bin/$REPO_NAME
 
 echo ""
-echo " > Usage:"
-echo " > validate-proto-http -h"
+echo "Run the app with:"
+echo "    $REPO_NAME"
 echo ""

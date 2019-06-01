@@ -1,0 +1,37 @@
+
+syntax = "proto3";
+
+package validate_proto_http.testdata.foo;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+service FooService {
+  rpc GoodSimple(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/good/url"
+      body: "*"
+    };
+  }
+
+  rpc BadNoInitialSlash(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "bad/url"
+      body: "*"
+    };
+  }
+
+  rpc GoodURLParameters(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/good/{param1}/url:{param2}"
+      body: "*"
+    };
+  }
+
+  rpc BadFinalSlash(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/bad/url/"
+      body: "*"
+    };
+  }
+}

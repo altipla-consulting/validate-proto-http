@@ -1,12 +1,12 @@
 
-workflow "Build on push" {
+workflow "Test on push" {
   on = "push"
-  resolves = ["Build"]
+  resolves = ["Test"]
 }
 
-action "Build" {
+action "Test" {
   uses = "actions-contrib/go@master"
-  args = "build ./..."
+  args = "test -race ./..."
 }
 
 workflow "Publish on release" {
@@ -15,6 +15,9 @@ workflow "Publish on release" {
 }
 
 action "Publish" {
+  needs = [
+    "Test",
+  ]
   uses = "altipla-consulting/altipla.actions/go-release@master"
   env = {
     BINARY_FOLDER = "./cmd/validate-proto-http"

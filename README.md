@@ -3,17 +3,19 @@
 
 Validate gRPC HTTP options mapping the methods to JSON.
 
+
 ## Install
 
-```
+```shell
 curl -sSL https://git.io/fjE3d | sudo bash
 ```
+
 
 ## Usage
 
 Run the app in the folder where you want to scan recursively all the protos:
 
-```
+```shell
 validate-proto-http
 ```
 

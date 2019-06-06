@@ -68,6 +68,10 @@ func checkFiles(root string) error {
 				for _, method := range service.GetMethod() {
 					ext, err := proto.GetExtension(method.GetOptions(), annotations.E_Http)
 					if err != nil {
+						if err == proto.ErrMissingExtension {
+							continue
+						}
+						
 						return errors.Trace(err)
 					}
 					rule := ext.(*annotations.HttpRule)

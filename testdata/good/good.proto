@@ -27,4 +27,6 @@ service GoodService {
       body: "*"
     };
   }
+
+  rpc MethodWithoutHttp(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }

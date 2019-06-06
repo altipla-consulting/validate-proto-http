@@ -13,7 +13,32 @@ import (
 	"libs.altipla.consulting/errors"
 )
 
-var pathRe = regexp.MustCompile(`^(/(([a-z0-9-]+)|(([a-z0-9-]+:)?{[a-z0-9_]+})))+$`)
+var pathRe = regexp.MustCompile(
+	// Start anchor.
+	`^` +
+
+		// Repeat every path segment at least one time.
+		`(` +
+
+		// Start with a slash.
+		`/(` +
+
+		// Simple segment with text only.
+		`([a-z0-9-]+)|` +
+
+		// Parameter with optional text only in both sides.
+		`(([a-z0-9-]+:)?{[a-z0-9_]+}(:[a-z0-9-]+)?)|` +
+
+		// Text only with a colon in the middle.
+		`([a-z0-9-]+:[a-z0-9-]+)` +
+
+		`)` +
+
+		`)+` +
+
+		// End anchor.
+		`$`,
+)
 
 func main() {
 	if err := run(); err != nil {
@@ -71,7 +96,7 @@ func checkFiles(root string) error {
 						if err == proto.ErrMissingExtension {
 							continue
 						}
-						
+
 						return errors.Trace(err)
 					}
 					rule := ext.(*annotations.HttpRule)

@@ -29,4 +29,11 @@ service GoodService {
   }
 
   rpc MethodWithoutHttp(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+
+  rpc Colon(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/good/url/first:second"
+      body: "*"
+    };
+  }
 }

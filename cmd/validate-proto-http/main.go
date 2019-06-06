@@ -27,10 +27,10 @@ var pathRe = regexp.MustCompile(
 		`([a-z0-9-]+)|` +
 
 		// Parameter with optional text only in both sides.
-		`(([a-z0-9-]+:)?{[a-z0-9_]+}(:[a-z0-9-]+)?)|` +
+		`(([a-z0-9-]+:)?{[a-z0-9_]+}(:[a-zA-Z0-9-]+)?)|` +
 
 		// Text only with a colon in the middle.
-		`([a-z0-9-]+:[a-z0-9-]+)` +
+		`([a-z0-9-]+:[a-zA-Z0-9-]+)` +
 
 		`)` +
 

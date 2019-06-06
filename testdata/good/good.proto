@@ -36,4 +36,11 @@ service GoodService {
       body: "*"
     };
   }
+
+  rpc Uppercase(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/good/url/first:batchGet"
+      body: "*"
+    };
+  }
 }
